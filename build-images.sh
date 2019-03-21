@@ -2,7 +2,24 @@
 
 set -e
 
-PROJECT=YOUR-PROJECTID-HERE
+PROJECT=${1}
+
+function error_exit
+{
+    echo "$1" 1>&2
+    exit 1
+}
+
+function usage
+{
+    echo "Usage:"
+    echo "$ build-images.sh [YOUR-PROJECT-ID]"
+}
+
+if [[ -z $@ ]]; then
+    usage
+    exit 0
+fi
 
 for DIR in frontend backend-single backend-multiple; do
     echo "=== building image for weather-${DIR} ==="
