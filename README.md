@@ -8,7 +8,7 @@ The images can be built using [Docker](http://docker.com) or using [Cloud Build]
 
 `gcloud builds submit --tag gcr.io/[PROJECTID]/weather-frontend:1.0 frontend/`
 
-Or to build all of the images, run `build-images.sh`
+Or to build all of the images, run `build-images.sh`.
 
 ## Deploying
 
