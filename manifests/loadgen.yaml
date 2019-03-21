@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loadgenerator
+  labels:
+    app: loadgenerator
+spec:
+  selector:
+    matchLabels:
+      app: loadgenerator
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: loadgenerator
+    spec:
+      terminationGracePeriodSeconds: 5
+      restartPolicy: Always
+      initContainers:
+      - name: wait-frontend
+        image: alpine:3.6
+        command: ['sh', '-c', 'set -x;  apk add --no-cache curl && 
+          until timeout -t 2 curl -f "http://${FRONTEND_HOST}"; do 
+            echo "waiting for http://${FRONTEND_HOST}"; 
+            sleep 2;
+          done;']
+        env:
+        - name: FRONTEND_HOST
+          value: weather-frontend.default:5000
+      containers:
+      - name: loadgenerator
+        image: gcr.io/clown-shoes-3000/loadgenerator:1.0
+        imagePullPolicy: Always
+        env:
+        - name: FRONTEND_HOST
+          value: weather-frontend.default:5000
+        resources:
+          requests:
+            cpu: 250m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+  
+    

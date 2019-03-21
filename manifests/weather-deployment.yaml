@@ -1,0 +1,114 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: weather-frontend
+  labels:
+    app: weather-frontend
+spec:
+  ports:
+  - port: 5000
+    name: http-frontend
+  selector:
+    app: weather-frontend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weather-frontend
+  labels:
+    app: weather-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weather-frontend
+  template:
+    metadata:
+      labels:
+        app: weather-frontend
+        version: v1
+    spec:
+      containers:
+      - name: weather-frontend
+        image: gcr.io/clown-shoes-3000/weather-frontend:1.0
+        imagePullPolicy: Always
+        env:
+        - name: BACKEND_HOSTPORT
+          value: weather-backend:5000
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: weather-backend
+  labels:
+    app: weather-backend
+spec:
+  ports:
+  - port: 5000
+    name: http-backend
+  selector:
+    app: weather-backend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weather-backend-single
+  labels:
+    app: weather-backend
+    version: single
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weather-backend
+  template:
+    metadata:
+      labels:
+        app: weather-backend
+        version: single
+    spec:
+      containers:
+      - name: weather-backend
+        image: gcr.io/clown-shoes-3000/weather-backend-single:1.0
+        imagePullPolicy: Always
+        env:
+        - name: OWM_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: openweathermap
+              key: apikey
+        ports:
+        - containerPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weather-backend-multiple
+  labels:
+    app: weather-backend
+    version: multiple
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weather-backend
+  template:
+    metadata:
+      labels:
+        app: weather-backend
+        version: multiple
+    spec:
+      containers:
+      - name: weather-backend
+        image: gcr.io/clown-shoes-3000/weather-backend-multiple:1.0
+        imagePullPolicy: Always
+        env:
+        - name: OWM_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: openweathermap
+              key: apikey
+        ports:
+        - containerPort: 5000

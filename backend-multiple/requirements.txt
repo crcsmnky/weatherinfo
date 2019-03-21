@@ -1,0 +1,39 @@
+cachetools==3.1.0
+certifi==2019.3.9
+chardet==3.0.4
+Click==7.0
+enum34==1.1.6
+Flask==1.0.2
+futures==3.2.0
+geojson==2.3.0
+gevent==1.4.0
+google-api-core==1.8.1
+google-auth==1.6.3
+google-cloud-core==0.29.1
+google-cloud-trace==0.20.2
+googleapis-common-protos==1.5.8
+greenlet==0.4.15
+grpcio==1.19.0
+idna==2.8
+itsdangerous==1.1.0
+Jinja2==2.10
+locust==0.0
+locustio==0.9.0
+MarkupSafe==1.1.1
+msgpack==0.6.1
+-e git+https://github.com/census-instrumentation/opencensus-python.git@c7eb899a09aa76f2482d1862407165f1de446bdf#egg=opencensus
+-e git+https://github.com/census-instrumentation/opencensus-python.git@c7eb899a09aa76f2482d1862407165f1de446bdf#egg=opencensus_ext_flask&subdirectory=contrib/opencensus-ext-flask
+-e git+https://github.com/census-instrumentation/opencensus-python.git@c7eb899a09aa76f2482d1862407165f1de446bdf#egg=opencensus_ext_requests&subdirectory=contrib/opencensus-ext-requests
+-e git+https://github.com/census-instrumentation/opencensus-python.git@c7eb899a09aa76f2482d1862407165f1de446bdf#egg=opencensus_ext_stackdriver&subdirectory=contrib/opencensus-ext-stackdriver
+protobuf==3.7.0
+pyasn1==0.4.5
+pyasn1-modules==0.2.4
+pyowm==2.9.0
+pytz==2018.9
+pyzmq==18.0.1
+requests==2.21.0
+rsa==4.0
+six==1.12.0
+urllib3==1.24.1
+Werkzeug==0.14.1
+wrapt==1.11.1
