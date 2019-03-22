@@ -3,10 +3,18 @@ import json
 
 from flask import Flask, request, jsonify
 from pyowm import OWM
+from prometheus_client import Gauge, generate_latest
 
 app = Flask(__name__)
 app.secret_key = '3c0716f88780d6d642330dfa3c96dbca' # md5 -s incremental-istio
 owm = OWM(os.environ.get('OWM_API_KEY'))
+
+city_metric = {
+    'Austin, TX, US': Gauge('city_temp_austin_tx_us', 'Temperatures for Austin, TX, US'), 
+    'San Francisco, CA, US': Gauge('city_temp_san_fran_ca_us', 'Temperatures for San Francisco, CA, US '),
+    'Seattle, WA, US': Gauge('city_temp_seattle_wa_us', 'Temperatures for Seattle, WA, US'),
+    'New York, NY, US': Gauge('city_temp_new_york_ny_us', 'Temperatures for New York, NY, US')
+}
 
 if os.environ.get('ENABLE_TRACING', None) is not None:
     from opencensus.ext.stackdriver import trace_exporter as stackdriver_exporter
@@ -21,20 +29,14 @@ if os.environ.get('ENABLE_TRACING', None) is not None:
 
 @app.route('/api/weather', methods=['GET'])
 def current_weather():
-    locations = [
-        "Austin, TX, US",
-        "San Francisco, CA, US",
-        "Seattle, WA, US",
-        "New York, NY, US"
-    ]
     ret = []
 
-    for loc in locations:
-        obs = owm.weather_at_place(loc)
+    for city, metric in city_metric.iteritems():
+        obs = owm.weather_at_place(city)
         w = obs.get_weather()
         temp = w.get_temperature('fahrenheit')
         conditions = {
-            'location': loc,
+            'location': city,
             'temp_cur': temp['temp'],
             'temp_min': temp['temp_min'],
             'temp_max': temp['temp_max'],
@@ -43,8 +45,14 @@ def current_weather():
             'icon': 'http://openweathermap.org/img/w/{}.png'.format(w.get_weather_icon_name())
         }
         ret.append(conditions)
+        metric.set(temp['temp'])
 
     return jsonify(ret)
+
+
+@app.route('/metrics', methods=['GET'])
+def metrics():
+    return generate_latest()
 
 
 if __name__ == "__main__":
