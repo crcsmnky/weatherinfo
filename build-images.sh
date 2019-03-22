@@ -3,6 +3,7 @@
 set -e
 
 PROJECT=${1}
+VERSION=1.0
 
 function error_exit
 {
@@ -22,9 +23,9 @@ if [[ -z $@ ]]; then
 fi
 
 for DIR in frontend backend-single backend-multiple; do
-    echo "=== building image for weather-${DIR} ==="
-    gcloud builds submit --tag gcr.io/${PROJECT}/weather-${DIR}:1.0 --async ${DIR}/
+    echo "=== building image gcr.io/${PROJECT}/weather-${DIR}:${VERSION} ==="
+    gcloud builds submit --tag gcr.io/${PROJECT}/weather-${DIR}:${VERSION} --async ${DIR}/ --project ${PROJECT}
 done
 
-echo "=== building image for loadgenerator ==="
-gcloud builds submit --tag gcr.io/${PROJECT}/loadgenerator:1.0 --async loadgenerator/
+echo "=== building image gcr.io/${PROJECT}/loadgenerator:${VERSION} ==="
+gcloud builds submit --tag gcr.io/${PROJECT}/loadgenerator:${VERSION} --async loadgenerator/ --project ${PROJECT}
