@@ -25,6 +25,7 @@ msgpack==0.6.1
 -e git+https://github.com/census-instrumentation/opencensus-python.git@c7eb899a09aa76f2482d1862407165f1de446bdf#egg=opencensus_ext_flask&subdirectory=contrib/opencensus-ext-flask
 -e git+https://github.com/census-instrumentation/opencensus-python.git@c7eb899a09aa76f2482d1862407165f1de446bdf#egg=opencensus_ext_requests&subdirectory=contrib/opencensus-ext-requests
 -e git+https://github.com/census-instrumentation/opencensus-python.git@c7eb899a09aa76f2482d1862407165f1de446bdf#egg=opencensus_ext_stackdriver&subdirectory=contrib/opencensus-ext-stackdriver
+prometheus-client==0.6.0
 protobuf==3.7.0
 pyasn1==0.4.5
 pyasn1-modules==0.2.4
