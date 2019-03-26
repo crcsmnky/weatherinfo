@@ -14,10 +14,12 @@ Or to build all of the images, run `build-images.sh`.
 
 There are deployment specifications for Kubernetes and Istio in `manifests`. Before proceeding, you will need an API key from [OpenWeatherMap](http://openweathermap.org/api).
 
+Once you have your API key, add a `Secret` to your Kubernetes cluster:
+- `kubectl create secret generic openweathermap --from-literal=apikey=[OPENWEATHERMAP-API-KEY]`
+
 ### Kubernetes
 
 To deploy the app to Kubernetes (without Istio), use the following commands:
-- `kubectl create secret generic openweathermap --from-literal=apikey=[OPENWEATHERMAP-API-KEY]`
 - `kubectl apply -f manifests/weather-deployment.yaml`
 
 *Note*: the Services are not externally accessible (no Ingress resource is created) so to access `weather-frontend` you'll need to use port forwarding and open [http://localhost:5000](http://localhost:5000):
