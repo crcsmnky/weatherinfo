@@ -42,3 +42,14 @@ Now grab the `istio-ingressgateway` Load Balancer IP address:
 
 *Note:* If you do not want to enable auto-injection of `istio-proxy` for the `default` namespace, you can also use `istioctl` to include `istio-proxy` in your Pods:
 - `kubectl apply -f <(istioctl kube-inject -f manifests/weather-deployment.yaml)`
+
+## Generating Load
+
+This repo also contains a [Locust](http://locust.io) script to generate load against `weather-frontend`. 
+
+**IMPORTANT**
+- The `loadgenerator` deployment is set to hit `weather-frontend.default:5000` and not `$INGRESSGATEWAY` therefore the traffic is coming from within the cluster
+- The `loadgenerator` is configured as a single replica with `5` clients randomly generating requests every 1-5s. *Keep this in mind so you don't go over your OpenWeatherMap API Key quota*.
+
+To deploy `loadgenerator`, update `FRONTEND_HOST` in `manifests/loadgen.yaml` and then apply:
+- `kubectl apply -f manifests/loadgen.yaml`
