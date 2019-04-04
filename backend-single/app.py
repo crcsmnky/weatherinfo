@@ -51,6 +51,9 @@ def current_weather():
 def metrics():
     return generate_latest()
 
+@app.route('/version', methods=['GET'])
+def version():
+    return "weather-backend: single"
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
