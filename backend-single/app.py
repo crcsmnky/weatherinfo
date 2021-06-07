@@ -2,7 +2,7 @@ import os
 import json
 
 from flask import Flask, request, jsonify
-from pyowm import OWM
+from pyowm.owm import OWM
 from prometheus_client import Gauge, generate_latest
 
 app = Flask(__name__)
@@ -28,18 +28,19 @@ if os.environ.get('ENABLE_TRACING', None) is not None:
 def current_weather():
     ret = []
 
-    for city, metric in city_metric.iteritems():
-        obs = owm.weather_at_place(city)
-        w = obs.get_weather()
-        temp = w.get_temperature('fahrenheit')
+    mgr = owm.weather_manager()
+    for city, metric in city_metric.items():
+        obs = mgr.weather_at_place(city)
+        w = obs.weather
+        temp = w.temperature('fahrenheit')
         conditions = {
             'location': city,
             'temp_cur': temp['temp'],
             'temp_min': temp['temp_min'],
             'temp_max': temp['temp_max'],
-            'status': w.get_status(),
-            'clouds': w.get_clouds(),
-            'icon': 'http://openweathermap.org/img/w/{}.png'.format(w.get_weather_icon_name())
+            'status': w.status,
+            'clouds': w.clouds,
+            'icon': 'http://openweathermap.org/img/w/{}.png'.format(w.weather_icon_name)
         }
         ret.append(conditions)
         metric.set(temp['temp'])
