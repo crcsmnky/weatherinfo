@@ -27,7 +27,7 @@ BASE_URL = 'http://{hostport}'.format(
 def index():
     resp = requests.get(BASE_URL + '/api/weather')
 
-    if resp.status_code is not 200:
+    if resp.status_code != 200:
         return render_template('index.html', cities=[], code=resp.status_code, msg=resp.text)
     else:
         return render_template('index.html', cities=resp.json(), msg=None)
